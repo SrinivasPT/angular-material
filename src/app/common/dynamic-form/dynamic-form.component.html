@@ -1,0 +1,9 @@
+<form [formGroup]="formGroup" fxLayout="row" fxLayoutWrap="wrap" fxLayoutGap="8px">
+  <ng-container *ngFor="let field of config">
+    <div [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
+      <app-mat-input *ngIf="field.type === 'text'" [control]="getControl(field.key)" [placeholder]="field.label"></app-mat-input>
+      <app-mat-datepicker *ngIf="field.type === 'date'" [control]="getControl(field.key)"></app-mat-datepicker>
+      <!-- Additional controls -->
+    </div>
+  </ng-container>
+</form>
