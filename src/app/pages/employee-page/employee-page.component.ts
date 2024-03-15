@@ -7,26 +7,29 @@ import { DynamicFormBuilderService } from '../../common/services/dynamic-form-bu
 import { employeeFormConfig } from './employee-form-config';
 
 @Component({
-  selector: 'app-employee-page',
-  templateUrl: './employee-page.component.html',
-  styleUrls: ['./employee-page.component.scss'],
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, DynamicFormComponent],
+    selector: 'app-employee-page',
+    templateUrl: './employee-page.component.html',
+    styleUrls: ['./employee-page.component.scss'],
+    standalone: true,
+    imports: [ReactiveFormsModule, CommonModule, DynamicFormComponent],
 })
 export class EmployeePageComponent implements OnInit {
-  form!: FormGroup;
-  config = employeeFormConfig;
+    form: FormGroup = new FormGroup({});
+    config = employeeFormConfig;
 
-  constructor(private formBuilder: DynamicFormBuilderService) {}
+    constructor(private formBuilder: DynamicFormBuilderService) {}
 
-  ngOnInit(): void {
-    this.form = this.formBuilder.createForm(this.config);
-  }
-
-  onSubmit() {
-    if (this.form.valid) {
-      console.log('Form Value:', this.form.value);
-      // Additional submission logic
+    ngOnInit(): void {
+        this.formBuilder.createForm(this.form, this.config);
+        this.form.valueChanges.subscribe((value) => {
+            console.log('Form Value Changed:', value);
+        });
     }
-  }
+
+    onSubmit() {
+        if (this.form.valid) {
+            console.log('Form Value:', this.form.value);
+            // Additional submission logic
+        }
+    }
 }

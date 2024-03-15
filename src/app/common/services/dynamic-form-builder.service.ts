@@ -2,20 +2,22 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class DynamicFormBuilderService {
-  constructor(private formBuilder: FormBuilder) {}
+    constructor(private formBuilder: FormBuilder) {}
 
-  createForm(fields: any[]): FormGroup {
-    const group = this.formBuilder.group({});
-    fields.forEach((field) => {
-      if (field.type !== 'group') {
-        group.addControl(field.key, this.formBuilder.control(field.value || '', field.validations || []));
-      } else {
-        // Handle group type or nested fields
-      }
-    });
-    return group;
-  }
+    createForm(form: FormGroup, fields: any[]): void {
+        fields.forEach((field) => {
+            if (field.type !== 'group') {
+                // Add a control for non-group fields
+                form.addControl(field.key, this.formBuilder.control(field.value || field.defaultValue, field.validations || []));
+            } else {
+                // Create a new FormGroup for group type fields and recursively add its child controls
+                const group = this.formBuilder.group({});
+                this.createForm(group, field.fields || []);
+                form.addControl(field.key, group);
+            }
+        });
+    }
 }
