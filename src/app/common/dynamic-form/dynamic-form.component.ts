@@ -26,4 +26,18 @@ export class DynamicFormComponent implements OnInit {
     getControl(key: string): FormControl {
         return this.formGroup.get(key) as FormControl;
     }
+
+    getNestedControl(groupKey: string, controlKey: string): FormControl {
+        const group = this.formGroup.get(groupKey) as FormGroup;
+        if (!group) {
+            console.error(`FormGroup with key '${groupKey}' not found.`);
+            return new FormControl(); // Or handle this case as appropriate
+        }
+        const control = group.get(controlKey) as FormControl;
+        if (!control) {
+            console.error(`FormControl with key '${controlKey}' not found in group '${groupKey}'.`);
+            return new FormControl(); // Or handle this case as appropriate
+        }
+        return control;
+    }
 }

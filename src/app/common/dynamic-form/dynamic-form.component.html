@@ -1,14 +1,23 @@
 <form [formGroup]="formGroup" fxLayout="row" fxLayoutWrap="wrap" fxLayoutGap="8px">
     <ng-container *ngFor="let field of config">
-        <div [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
-            <app-mat-input
-                *ngIf="field.type === 'text'"
-                [control]="getControl(field.key)"
-                [placeholder]="field.label"
-                [defaultValue]="field.defaultValue"
-            ></app-mat-input>
-            <app-mat-datepicker *ngIf="field.type === 'date'" [control]="getControl(field.key)"></app-mat-datepicker>
-            <!-- Additional controls -->
+        <!-- Handle input fields -->
+        <div *ngIf="field.type !== 'group'" [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
+            <app-mat-input *ngIf="field.type === 'text'" [control]="getControl(field.key)" [placeholder]="field.label"></app-mat-input>
+            <!-- Handle other input types -->
         </div>
+
+        <!-- Handle nested form groups -->
+        <ng-container *ngIf="field.type === 'group'">
+            <div [formGroupName]="field.key" [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
+                <ng-container *ngFor="let subfield of field.fields">
+                    <app-mat-input
+                        *ngIf="subfield.type === 'text'"
+                        [control]="getNestedControl(field.key, subfield.key)"
+                        [placeholder]="subfield.label"
+                    ></app-mat-input>
+                    <!-- Handle other input types for nested fields -->
+                </ng-container>
+            </div>
+        </ng-container>
     </ng-container>
 </form>
