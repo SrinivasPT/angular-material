@@ -2,5 +2,6 @@
     <p>If you see this, EmployeePageComponent is rendering!</p>
     <h1>Employee Form</h1>
     <app-dynamic-form [config]="config" [parent]="form" (submit)="onSubmit()"></app-dynamic-form>
+    <app-dynamic-form [config]="oneMoreConfig" [parent]="oneMoreForm" (submit)="onSubmit()"></app-dynamic-form>
     <button (click)="onSubmit()">Submit</button>
 </div>

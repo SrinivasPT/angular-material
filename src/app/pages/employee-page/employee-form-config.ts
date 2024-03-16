@@ -1,9 +1,24 @@
 import { Validators } from '@angular/forms';
 
 export const employeeFormConfig = [
-    { key: 'firstName', label: 'First Name', type: 'text', width: '4', defaultValue: 'John', validations: [Validators.required] },
-    { key: 'lastName', label: 'Last Name', type: 'text', width: '4', defaultValue: 'Doe', validations: [Validators.required] },
-    { key: 'email', label: 'Email', type: 'text', width: '4', validations: [Validators.required] },
+    {
+        key: 'firstName',
+        label: 'First Name',
+        type: 'text',
+        width: '4',
+        defaultValue: 'John',
+        validations: [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
+        fields: [],
+    },
+    {
+        key: 'lastName',
+        label: 'Last Name',
+        type: 'text',
+        width: '4',
+        defaultValue: 'Doe',
+        validations: [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
+    },
+    { key: 'email', label: 'Email', type: 'text', width: '4', validations: [Validators.required, Validators.email] },
     { key: 'age', label: 'Age', type: 'number', numberwidth: '4', validations: [Validators.required] },
     { key: 'dateOfBirth', label: 'Date Of Birth', type: 'date', width: '4', validations: [Validators.required] },
     {
