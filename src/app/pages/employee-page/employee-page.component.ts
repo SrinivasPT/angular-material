@@ -21,9 +21,6 @@ export class EmployeePageComponent implements OnInit {
 
     ngOnInit(): void {
         this.formBuilder.createForm(this.form, this.config);
-        this.form.valueChanges.subscribe((value) => {
-            console.log('Form Value Changed:', value);
-        });
     }
 
     onSubmit() {
