@@ -8,7 +8,6 @@ export const employeeFormConfig = [
         width: '4',
         defaultValue: 'John',
         validations: [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
-        fields: [],
     },
     {
         key: 'lastName',
@@ -19,7 +18,7 @@ export const employeeFormConfig = [
         validations: [Validators.required, Validators.minLength(1), Validators.maxLength(5)],
     },
     { key: 'email', label: 'Email', type: 'text', width: '4', validations: [Validators.required, Validators.email] },
-    { key: 'age', label: 'Age', type: 'number', numberwidth: '4', validations: [Validators.required] },
+    { key: 'age', label: 'Age', type: 'text', numberwidth: '4', validations: [Validators.required] },
     { key: 'dateOfBirth', label: 'Date Of Birth', type: 'date', width: '4', validations: [Validators.required] },
     {
         key: 'department',
@@ -36,8 +35,8 @@ export const employeeFormConfig = [
     },
     {
         key: 'details',
-        type: 'group',
-        fields: [
+        type: 'table',
+        columns: [
             { key: 'addressLineOne', label: 'Address Line One', type: 'text', width: '4', validations: [Validators.required] },
             { key: 'addressLineTwo', label: 'Address Line Two', type: 'text', width: '4', validations: [Validators.required] },
         ],

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerComponent } from '../controls/mat-datepicker/mat-datepicker.component';
 import { MatInputComponent } from '../controls/mat-input/mat-input.component';
 import { MatNumberComponent } from '../controls/mat-numeric/mat-number.component';
 import { MatSelectComponent } from '../controls/mat-select/mat-select.component';
+import { MatTableComponent } from '../controls/mat-table/mat-table.component';
 
 @Component({
     selector: 'app-dynamic-field',
@@ -18,6 +19,7 @@ import { MatSelectComponent } from '../controls/mat-select/mat-select.component'
         MatSelectComponent,
         MatNumberComponent,
         FlexLayoutModule,
+        MatTableComponent,
     ],
     templateUrl: './dynamic-field.component.html',
     styleUrl: './dynamic-field.component.css',
@@ -32,5 +34,10 @@ export class DynamicFieldComponent {
 
     getForm(key: string): FormGroup {
         return this.parent.get(key) as FormGroup;
+    }
+
+    getFormArray(key: string): FormArray | null {
+        const control = this.parent.get(key);
+        return control instanceof FormArray ? control : null;
     }
 }

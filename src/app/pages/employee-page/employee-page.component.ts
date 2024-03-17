@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { DynamicFormComponent } from '../../common/dynamic-form/dynamic-form.component';
 import { DynamicFormBuilderService } from '../../common/services/dynamic-form-builder.service';
 import { employeeFormConfig } from './employee-form-config';
@@ -16,22 +17,32 @@ import { employeeFormConfig } from './employee-form-config';
 export class EmployeePageComponent implements OnInit {
     form: FormGroup = new FormGroup({});
     config = employeeFormConfig;
+    mode: 'edit' | 'view' = 'view'; // Default mode
 
     oneMoreForm: FormGroup = new FormGroup({});
-    oneMoreConfig = employeeFormConfig.filter((item) => item.key === 'details')[0]['fields'] as any;
 
-    constructor(private formBuilder: DynamicFormBuilderService) {}
+    constructor(private route: ActivatedRoute, private formBuilder: DynamicFormBuilderService) {}
 
     ngOnInit(): void {
+        this.route.params.subscribe((params) => {
+            this.mode = params['mode'] || 'view'; // Fallback to 'edit' if no mode is provided
+        });
+
         this.formBuilder.createForm(this.form, this.config);
-        this.formBuilder.createForm(this.oneMoreForm, this.oneMoreConfig);
+
+        // Move the disable logic here, after the form has been constructed
+        if (this.mode === 'view') {
+            this.form.disable(); // Disable the form if in view mode
+        } else {
+            this.form.enable(); // Ensure the form is enabled in edit mode
+        }
     }
 
     onSubmit() {
-        // if (this.form.valid) {
         console.log('Form Value:', this.form.value);
-        console.log('Form Value:', this.oneMoreForm.value);
-        // Additional submission logic
-        // }
+    }
+
+    changeValues() {
+        this.form.patchValue({ firstName: 'Krishna', lastName: 'Madhura' });
     }
 }

@@ -1,4 +1,4 @@
-<form [formGroup]="parent" fxLayout="row" fxLayoutWrap="wrap" fxLayoutGap="8px">
+<form [formGroup]="parent" class="flex">
     <ng-container *ngFor="let field of config">
         <app-dynamic-field [field]="field" [parent]="parent"></app-dynamic-field>
     </ng-container>

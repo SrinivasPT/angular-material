@@ -1,4 +1,4 @@
-<div *ngIf="field.type !== 'group'" [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
+<div *ngIf="field.type !== 'group'" class="flex">
     <app-mat-input *ngIf="field.type === 'text'" [control]="getControl(field.key)" [placeholder]="field.label"></app-mat-input>
     <app-mat-number *ngIf="field.type === 'number'" [control]="getControl(field.key)" [placeholder]="field.label"></app-mat-number>
     <app-mat-select
@@ -8,11 +8,18 @@
         [options]="field.options"
     ></app-mat-select>
     <app-mat-datepicker *ngIf="field.type === 'date'" [control]="getControl(field.key)" [placeholder]="field.label"></app-mat-datepicker>
+    <app-mat-table
+        *ngIf="field.type === 'table'"
+        class="table"
+        [formArray]="getFormArray(field.key)!"
+        [columns]="field.columns"
+    ></app-mat-table>
+
     <!-- Add other field types as needed -->
 </div>
 
 <ng-container *ngIf="field.type === 'group'" [formGroup]="getForm(field.key)">
-    <div [formGroupName]="field.key" [ngStyle]="{ flex: '0 1 ' + (field.width / 12) * 100 + '%' }">
+    <div [formGroupName]="field.key" class="flex">
         <ng-container *ngFor="let nestedField of field.fields">
             <app-dynamic-field [field]="nestedField" [parent]="getForm(field.key)"></app-dynamic-field>
         </ng-container>
