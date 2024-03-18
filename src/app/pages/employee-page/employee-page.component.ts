@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -48,7 +48,28 @@ export class EmployeePageComponent implements OnInit {
     }
 
     changeValues() {
+        // Update the top-level form values
         this.form.patchValue({ ...MOCK_DATA });
-        this.form.get('details')?.patchValue([...MOCK_DATA['details']]);
+
+        // Update 'details' FormArray
+        const details = this.form.get('details') as FormArray;
+        const newDetails = [
+            { addressLineOne: 'One', addressLineTwo: 'Two' },
+            { addressLineOne: 'Three', addressLineTwo: 'Four' },
+        ];
+
+        // Clear the existing FormArray
+        while (details.length) {
+            details.removeAt(0);
+        }
+
+        // Add new FormGroup instances to the FormArray for each item in newDetails
+        newDetails.forEach((detail) => {
+            const addressFormGroup = new FormGroup({
+                addressLineOne: new FormControl(detail.addressLineOne),
+                addressLineTwo: new FormControl(detail.addressLineTwo),
+            });
+            details.push(addressFormGroup);
+        });
     }
 }

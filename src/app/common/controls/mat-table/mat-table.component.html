@@ -1,11 +1,13 @@
 <table mat-table [dataSource]="tableData" class="mat-elevation-z8">
+    <!-- Column definitions -->
     <ng-container *ngFor="let column of config.columns" [matColumnDef]="column.key">
         <th mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
-        <td mat-cell *matCellDef="let element = index">
-            {{ tableData[element][column.key] }}
-        </td>
+        <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
     </ng-container>
 
+    <!-- Header row definition -->
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <!-- Data rows definition -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index" [attr.data-index]="i" [trackBy]="trackByFn"></tr>
 </table>

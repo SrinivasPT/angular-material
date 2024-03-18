@@ -40,6 +40,10 @@ export class MatTableComponent implements OnInit, OnChanges {
         }
     }
 
+    trackByFn(index: number, item: any): number {
+        return index; // or any unique property of the item if available
+    }
+
     private updateTableData(): void {
         this.tableData = this.formArray.controls.map((group) => group.value);
     }
