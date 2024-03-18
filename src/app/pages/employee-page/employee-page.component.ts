@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -21,14 +21,19 @@ export class EmployeePageComponent implements OnInit {
     mode: 'edit' | 'view' = 'view'; // Default mode
     data = MOCK_DATA;
 
-    constructor(private route: ActivatedRoute, private formBuilder: DynamicFormBuilderService) {}
+    constructor(
+        private route: ActivatedRoute,
+        private myFormBuilder: DynamicFormBuilderService,
+        private formBuilder: FormBuilder,
+        private cdr: ChangeDetectorRef
+    ) {}
 
     ngOnInit(): void {
         this.route.params.subscribe((params) => {
             this.mode = params['mode'] || 'view'; // Fallback to 'edit' if no mode is provided
         });
 
-        this.formBuilder.createForm(this.form, this.config);
+        this.myFormBuilder.createForm(this.form, this.config);
 
         // Move the disable logic here, after the form has been constructed
         if (this.mode === 'view') {
@@ -43,21 +48,7 @@ export class EmployeePageComponent implements OnInit {
     }
 
     changeValues() {
-        this.form.patchValue(this.data);
-        const newDetails = [
-            { addressLineOne: 'One', addressLineTwo: 'Two' },
-            { addressLineOne: 'Three', addressLineTwo: 'Four' },
-        ];
-
-        const tableArray = this.form.get('details') as FormArray;
-        while (tableArray.length) {
-            tableArray.removeAt(0);
-        }
-
-        newDetails.forEach((rowData) => {
-            const rowGroup = this.formBuilder.createRowFormGroup(this.config.find((field) => field.key === 'details'));
-            rowGroup.patchValue(rowData);
-            tableArray.push(rowGroup);
-        });
+        this.form.patchValue({ ...MOCK_DATA });
+        this.form.get('details')?.patchValue([...MOCK_DATA['details']]);
     }
 }

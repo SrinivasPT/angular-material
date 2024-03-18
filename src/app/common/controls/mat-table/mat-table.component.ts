@@ -1,37 +1,46 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { FormArray, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
 
 @Component({
     selector: 'app-mat-table',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, MatTableModule],
+    imports: [CommonModule, ReactiveFormsModule, MatFormFieldModule, MatTableModule],
     templateUrl: './mat-table.component.html',
-    styleUrl: './mat-table.component.css',
+    styleUrls: ['./mat-table.component.css'],
 })
-export class MatTableComponent implements OnInit {
-    @Input() formArray: FormArray = this.formBuilder.array([]);
+export class MatTableComponent implements OnInit, OnChanges {
+    @Input() formArray!: FormArray;
     @Input() config: any;
-
-    columns: any[] = [];
     displayedColumns: string[] = [];
-    dataSource: any[] = [];
+    tableData: any[] = [];
 
-    constructor(private formBuilder: FormBuilder) {}
-
-    ngOnInit() {
-        this.columns = this.config.columns;
-        this.displayedColumns = this.columns.map((col) => col.key);
+    ngOnInit(): void {
+        this.setupTable();
     }
 
-    // ngOnChanges(changes: SimpleChanges): void {
-    //     if (changes['formArray']) {
-    //         this.dataSource = this.formArray.value;
-    //     }
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['formArray'] || changes['config']) {
+            this.setupTable();
+        }
+    }
 
-    //     if (changes['columns']) {
-    //         this.displayedColumns = this.columns.map((col) => col.key);
-    //     }
-    // }
+    private setupTable(): void {
+        if (this.config && this.config.columns) {
+            this.displayedColumns = this.config.columns.map((col: any) => col.key);
+        }
+        if (this.formArray) {
+            this.updateTableData();
+            // React to form array changes
+            this.formArray.valueChanges.subscribe((values) => {
+                this.updateTableData();
+            });
+        }
+    }
+
+    private updateTableData(): void {
+        this.tableData = this.formArray.controls.map((group) => group.value);
+    }
 }
