@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 
@@ -10,22 +10,28 @@ import { MatTableModule } from '@angular/material/table';
     templateUrl: './mat-table.component.html',
     styleUrl: './mat-table.component.css',
 })
-export class MatTableComponent {
+export class MatTableComponent implements OnInit {
     @Input() formArray: FormArray = this.formBuilder.array([]);
-    @Input() columns: any[] = [];
+    @Input() config: any;
 
+    columns: any[] = [];
     displayedColumns: string[] = [];
     dataSource: any[] = [];
 
     constructor(private formBuilder: FormBuilder) {}
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['formArray']) {
-            this.dataSource = this.formArray.value;
-        }
-
-        if (changes['columns']) {
-            this.displayedColumns = this.columns.map((col) => col.key);
-        }
+    ngOnInit() {
+        this.columns = this.config.columns;
+        this.displayedColumns = this.columns.map((col) => col.key);
     }
+
+    // ngOnChanges(changes: SimpleChanges): void {
+    //     if (changes['formArray']) {
+    //         this.dataSource = this.formArray.value;
+    //     }
+
+    //     if (changes['columns']) {
+    //         this.displayedColumns = this.columns.map((col) => col.key);
+    //     }
+    // }
 }

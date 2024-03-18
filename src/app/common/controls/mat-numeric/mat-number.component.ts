@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
@@ -22,9 +22,17 @@ import { MatInputModule } from '@angular/material/input';
         `,
     ],
 })
-export class MatNumberComponent {
+export class MatNumberComponent implements OnInit {
     @Input() control!: FormControl;
-    @Input() label: string = '';
-    @Input() placeholder: string = '';
-    @Input() errorMessage: string = '';
+    @Input() config!: any;
+
+    label: string = '';
+    placeholder: string = '';
+    errorMessage: string = '';
+
+    ngOnInit(): void {
+        this.label = this.config.label;
+        this.placeholder = this.config.placeholder;
+        this.errorMessage = this.config.errorMessage;
+    }
 }

@@ -15,16 +15,22 @@ export class DynamicFormBuilderService {
                 this.createForm(group, field.fields || []);
                 form.addControl(field.key, group);
             } else if (field.type === 'table') {
-                const array = this.formBuilder.array([]);
-                field.columns.forEach((item: any) => {
-                    const control = this.formBuilder.control(item.value || item.defaultValue, item.validations || []);
-                    array.push(control);
-                });
+                const rowStructure = this.createRowFormGroup(field);
+                const array = this.formBuilder.array([rowStructure, rowStructure]);
                 form.addControl(field.key, array);
             } else {
                 // Add a control for non-group fields
                 form.addControl(field.key, this.formBuilder.control(field.value || field.defaultValue, field.validations || []));
             }
         });
+    }
+
+    public createRowFormGroup(field: any): FormGroup {
+        const group: any = {};
+        const columns = field.columns;
+        columns.forEach((column: any) => {
+            group[column.key] = this.formBuilder.control(column.value || column.defaultValue, column.validations || []);
+        });
+        return this.formBuilder.group(group);
     }
 }

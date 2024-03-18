@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -16,12 +16,23 @@ import { MatInputModule } from '@angular/material/input';
         </mat-form-field>
     `,
 })
-export class MatInputComponent {
+export class MatInputComponent implements OnInit {
     @Input() control!: FormControl;
-    @Input() label: string = '';
-    @Input() type: string = 'text';
-    @Input() width: string = '100%';
-    @Input() placeholder: string = '';
-    @Input() defaultValue: string = '';
-    @Input() errorMessage: string = '';
+    @Input() config!: any;
+
+    label: string = '';
+    type: string = 'text';
+    width: string = '100%';
+    placeholder: string = '';
+    defaultValue: string = '';
+    errorMessage: string = '';
+
+    ngOnInit(): void {
+        this.label = this.config.label;
+        this.type = this.config.type;
+        this.width = this.config.width;
+        this.placeholder = this.config.label;
+        this.defaultValue = this.config.defaultValue;
+        this.errorMessage = this.config.errorMessage;
+    }
 }

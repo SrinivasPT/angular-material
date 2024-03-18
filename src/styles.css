@@ -10,10 +10,10 @@ body {
 }
 .flex {
     display: flex;
-    flex-direction: column; /* Stack children vertically */
+    flex-direction: row; /* Stack children vertically */
     flex-wrap: wrap;
 }
 
-.mat-table {
+.table {
     width: 100vw;
 }

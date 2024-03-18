@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicFormComponent } from '../../common/dynamic-form/dynamic-form.component';
 import { DynamicFormBuilderService } from '../../common/services/dynamic-form-builder.service';
 import { employeeFormConfig } from './employee-form-config';
+import { MOCK_DATA } from './mock-data';
 
 @Component({
     selector: 'app-employee-page',
@@ -18,8 +19,7 @@ export class EmployeePageComponent implements OnInit {
     form: FormGroup = new FormGroup({});
     config = employeeFormConfig;
     mode: 'edit' | 'view' = 'view'; // Default mode
-
-    oneMoreForm: FormGroup = new FormGroup({});
+    data = MOCK_DATA;
 
     constructor(private route: ActivatedRoute, private formBuilder: DynamicFormBuilderService) {}
 
@@ -43,6 +43,21 @@ export class EmployeePageComponent implements OnInit {
     }
 
     changeValues() {
-        this.form.patchValue({ firstName: 'Krishna', lastName: 'Madhura' });
+        this.form.patchValue(this.data);
+        const newDetails = [
+            { addressLineOne: 'One', addressLineTwo: 'Two' },
+            { addressLineOne: 'Three', addressLineTwo: 'Four' },
+        ];
+
+        const tableArray = this.form.get('details') as FormArray;
+        while (tableArray.length) {
+            tableArray.removeAt(0);
+        }
+
+        newDetails.forEach((rowData) => {
+            const rowGroup = this.formBuilder.createRowFormGroup(this.config.find((field) => field.key === 'details'));
+            rowGroup.patchValue(rowData);
+            tableArray.push(rowGroup);
+        });
     }
 }
